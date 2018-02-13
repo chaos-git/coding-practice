@@ -1,4 +1,5 @@
 import sys
+import time
 from Queue import PriorityQueue
 
 class Parser:
@@ -20,21 +21,28 @@ class BeautifulPath:
         self.node_edges_map[frm].append((to, cost))
 
     def find_least(self, start_node, end_node):
+        lowest_end_cost = None
         visited = {}
         queue = PriorityQueue()
         queue.put((0, start_node))
         while not queue.empty():
             (running_cost, current_node) = queue.get()
-            if current_node == end_node:
-                return running_cost
             for (next_node, cost) in self.node_edges_map.get(current_node, []):
                 new_running_cost = running_cost | cost
-                if next_node in visited and new_running_cost >= visited[next_node]:
+                visited_key = "{}.{}".format(next_node, new_running_cost)
+                if visited_key in visited and new_running_cost >= visited[visited_key]:
                     continue  # seen it before cheaper
-                visited[next_node] = new_running_cost
+                if lowest_end_cost is not None and running_cost >= lowest_end_cost:
+                    continue  # wont get cheaper than something aleady found
+                if next_node == end_node and (new_running_cost < lowest_end_cost or lowest_end_cost is None):
+                    lowest_end_cost = new_running_cost
+                visited[visited_key] = new_running_cost
                 queue.put((new_running_cost, next_node))
-        return -1
+        return lowest_end_cost if lowest_end_cost is not None else -1
 
 (node_count, edge_count, start_node, end_node, edges) = Parser().parse(sys.stdin)
 
+start = time.time()
 print BeautifulPath(edges).find_least(start_node, end_node)
+end = time.time()
+print >> sys.stderr, "Took time: {}".format(end - start)
