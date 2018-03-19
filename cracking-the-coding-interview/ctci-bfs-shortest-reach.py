@@ -9,14 +9,14 @@ class Graph:
 
     def find_all_distances(self, start_node):
         visited = { start_node: 0 }
-        queue = [start_node]
-        while len(queue):
-            current = queue.pop()
+        stack = [start_node]
+        while len(stack):
+            current = stack.pop()
             cost = visited[current]
             for neighbor in self.neighbors[current]:
                 if neighbor not in visited or visited[neighbor] > cost + 6:
                     visited[neighbor] = cost + 6
-                    queue.append(neighbor)
+                    stack.append(neighbor)
         
         other_nodes = [node for node in self.nodes if node != start_node]
         return map(lambda node: visited[node] if node in visited else -1, other_nodes)
