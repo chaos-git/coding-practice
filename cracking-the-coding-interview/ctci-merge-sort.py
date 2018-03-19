@@ -33,10 +33,7 @@ def process_merges(arr, merges):
             if l > mid:
                 arr[a] = aux[r]
                 r += 1
-            elif r > right:
-                arr[a] = aux[l]
-                l += 1
-            elif aux[l] <= aux[r]:
+            elif r > right or aux[l] <= aux[r]:
                 arr[a] = aux[l]
                 l += 1
             else:
