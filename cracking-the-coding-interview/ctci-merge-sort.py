@@ -1,8 +1,6 @@
 #!/bin/python
-
 # !IMPORTANT: must run as 'PyPy' otherwise a timeout will occur on 3 tests
 
-import math
 import sys
 
 ''' Uses stack instead of recursion because was hitting StackOverflow issues
