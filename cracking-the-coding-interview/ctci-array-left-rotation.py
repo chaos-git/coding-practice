@@ -1,7 +1,7 @@
 def array_left_rotation(a, n, k):
     result = []
     for i in range(len(a)):
-        shifted_i = (len(a) + i + k) % len(a)
+        shifted_i = (i + k) % len(a)
         result.append(a[shifted_i])
     return result  
 
