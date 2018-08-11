@@ -29,38 +29,30 @@ Special thanks to @stellari for adding this problem and creating all test cases.
 #         self.val = x
 #         self.next = None
 
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
 class Solution(object):
     def getIntersectionNode(self, headA, headB):
         """
         :type head1, head1: ListNode
         :rtype: ListNode
         """
-        count_a = self.get_length(headA)
-        count_b = self.get_length(headB)
-
+        flips = 0
         current_a = headA
         current_b = headB
 
-        intersecting_node = None
-        while count_a or count_b:
-            if count_a == count_b:
-                if current_a.val == current_b.val:
-                    intersecting_node = intersecting_node or current_a
-                else:
-                    intersecting_node = None
-            if count_a >= count_b:
-                current_a = current_a.next
-                count_a -= 1
-            elif count_a <= count_b:
-                current_b = current_b.next
-                count_b -= 1
+        while current_a and current_b and flips <= 2:
+            if current_a.val == current_b.val:
+                return current_a
 
-        return intersecting_node
+            current_a = current_a.next or headB
+            current_b = current_b.next or headA
 
-    def get_length(self, node):
-        count = 0
-        current = node
-        while current:
-            count += 1
-            current = current.next
-        return count
+            if current_a == headB:
+                flips += 1
+
+        return None
