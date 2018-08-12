@@ -88,9 +88,7 @@ class Solution(object):
         :type robot: Robot
         :rtype: None
         """
-        sum_tuple = lambda t1, t2: (t1[0] + t2[0], t1[1] + t2[1])
         orientations = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-
         cleaned = set()
 
         def dfs_clean(coord, orientation):
@@ -98,13 +96,13 @@ class Solution(object):
             cleaned.add(coord)
             for orientation_delta in range(4):
                 new_orientation = (orientation + orientation_delta) % 4
-                candidate = sum_tuple(coord, orientations[new_orientation])
+                candidate = tuple(map(sum, zip(coord, orientations[new_orientation])))
                 if candidate not in cleaned and robot.move():
                     dfs_clean(candidate, new_orientation)
-                    robot.turnLeft()
-                    robot.turnLeft()
+                    robot.turnRight()
+                    robot.turnRight()
                     robot.move()
-                    robot.turnLeft()
-                    robot.turnLeft()
+                    robot.turnRight()
+                    robot.turnRight()
                 robot.turnRight()
         dfs_clean((0, 0), 0)
