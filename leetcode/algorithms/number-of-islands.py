@@ -39,19 +39,14 @@ class Solution(object):
             while stack:
                 cur_x, cur_y = stack.pop()
                 grid[cur_y][cur_x] = "0"
-                for n_x, n_y in get_neighbors(cur_x, cur_y):
-                    if is_inside(n_x, n_y) and grid[n_y][n_x] == "1":
-                        stack.append((n_x, n_y))
+                for n_x, n_y in nearby_land(cur_x, cur_y):
+                    stack.append((n_x, n_y))
 
-        def get_neighbors(x, y):
-            offsets = [(-1, 0), (1, 0),(0, -1), (0, 1)]
-            return [(x + off_x, y + off_y) for off_x, off_y in offsets]
-
-        def is_inside(x, y):
-            return x >= 0 and \
-                    x < width and \
-                    y >= 0 and \
-                    y < height
+        def nearby_land(x, y):
+            return [
+                (x1, y1) for x1, y1 in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+                if x1 >= 0 and x1 < width and y1 >= 0 and y1 < height and grid[y1][x1] == "1"
+            ]
 
         islands = 0
         for y, row in enumerate(grid):
