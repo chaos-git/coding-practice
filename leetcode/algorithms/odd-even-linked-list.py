@@ -32,22 +32,16 @@ class Solution(object):
         """
         if not head:
             return head
-        
+
         evens = evens_tail = ListNode(None)
-        odds = odds_tail = ListNode(None)
-
-        is_odd = True
         current = head
-        while current:
-            if is_odd:
-                odds_tail.next = current
-                odds_tail = current
-            else:
-                evens_tail.next = current
-                evens_tail = current
-            is_odd = not is_odd
+        while current.next:
+            evens_tail.next = current.next
+            evens_tail = current.next
+            current.next = current.next.next
+            if not current.next:
+                break
             current = current.next
-
-        odds_tail.next = evens.next
+        current.next = evens.next
         evens_tail.next = None
-        return odds.next
+        return head
