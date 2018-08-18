@@ -26,16 +26,22 @@ class Solution(object):
         nums.sort()
 
         # grab indexes of numbers
-        seen = {}
-        for index, number in enumerate(nums):
-            seen[number] = seen.get(number, []) + [index]
-                            
-        results = set()
+        seen = {number: index for index, number in enumerate(nums)}
+
+        results = []
         for left in range(len(nums) - 2):
+            if left > 0 and nums[left] == nums[left - 1]:
+                continue
             for middle in range(left + 1, len(nums) - 1):
-                if left > 0 and nums[left] == nums[left - 1]:
+                if middle > left + 1 and nums[middle] == nums[middle - 1]:
                     continue
                 remainder = 0 - nums[left] - nums[middle]
-                if remainder in seen and max(seen[remainder]) > middle:
-                    results.add((nums[left], nums[middle], remainder))
-        return list(results)
+                if seen.get(remainder, 0) > middle:
+                    results.append((nums[left], nums[middle], remainder))
+        return results
+
+        # complexity is n^2:
+        #    sort = nlogn
+        #    indexing = n
+        #    2sum = (n^2)/2
+        # space is n
