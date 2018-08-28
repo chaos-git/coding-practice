@@ -20,20 +20,12 @@ class Solution(object):
         :type str: List[str]
         :rtype: void Do not return anything, modify str in-place instead.
         """
-        index = 0
-        while index < len(string):
-            next_start, next_end = self.__get_next_word_boundary(string, index)
-            self.__reverse(string, next_start, next_end)
-            index = next_end + 1
+        start = 0
+        for index in range(len(string) + 1):
+            if index == len(string) or string[index] == ' ':
+                self.__reverse(string, start, index - 1)
+                start = index + 1
         self.__reverse(string, 0, len(string) - 1)
-
-    def __get_next_word_boundary(self, string, start_index):
-        start, end = start_index, start_index
-        while end < len(string) - 1 and string[end + 1] != ' ':
-            if string[start] == ' ':
-                start += 1
-            end += 1
-        return (start, end)
 
     def __reverse(self, string, start, end):
         while start < end:
