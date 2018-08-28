@@ -38,8 +38,12 @@ class Solution(object):
         """
         if not t1 and not t2:
             return None
+        if not t1:
+            return t2
+        if not t2:
+            return t1
 
-        new_node = TreeNode((t1.val if t1 else 0) + (t2.val if t2 else 0))
-        new_node.left = self.mergeTrees(t1.left if t1 else None, t2.left if t2 else None)
-        new_node.right = self.mergeTrees(t1.right if t1 else None, t2.right if t2 else None)
+        new_node = TreeNode(t1.val + t2.val)
+        new_node.left = self.mergeTrees(t1.left, t2.left)
+        new_node.right = self.mergeTrees(t1.right, t2.right)
         return new_node
