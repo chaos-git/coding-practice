@@ -30,14 +30,9 @@ class Solution(object):
         if x < 0:
             return False
 
-        digits = 0
-        while 10 ** digits <= x:
-            digits += 1
-
-        for index in range(digits / 2):
-            if self.__get_digit(x, index) != self.__get_digit(x, digits - index - 1):
-                return False
-        return True
-
-    def __get_digit(self, number, index):
-        return (number / (10 ** index)) % 10
+        flipped = 0
+        queue = x
+        while tmp:
+            flipped = flipped * 10 + queue % 10
+            queue /= 10
+        return x == flipped
