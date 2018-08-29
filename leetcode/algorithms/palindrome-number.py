@@ -32,7 +32,7 @@ class Solution(object):
 
         flipped = 0
         queue = x
-        while tmp:
+        while queue:
             flipped = flipped * 10 + queue % 10
             queue /= 10
         return x == flipped
