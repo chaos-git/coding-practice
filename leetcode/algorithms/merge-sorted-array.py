@@ -25,7 +25,7 @@ class Solution(object):
         :rtype: void Do not return anything, modify nums1 in-place instead.
         """
         index1, index2 = m - 1, n - 1
-        for current in range(m + n - 1, -1, -1):
+        for current in reversed(range(m + n)):
             take_first = index2 < 0 or (index1 >= 0 and nums1[index1] > nums2[index2])
             nums1[current] = nums1[index1] if take_first else nums2[index2]
             index1 -= take_first
