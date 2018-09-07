@@ -46,14 +46,12 @@ class Solution(object):
         :type expression: str
         :rtype: str
         """
-        return self.__resolve(expression, 0)[0]
+        def resolve(index):
+            if index < len(expression) - 1 and expression[index + 1] == '?':
+                condition = expression[index] == 'T'
+                true_case, end_index = resolve(index + 2)
+                false_case, end_index = resolve(end_index + 2)
+                return (true_case if condition else false_case, end_index)
+            return expression[index], index
 
-    def __resolve(self, expression, index):
-        # if followed by question mark, must be a condition
-        if index < len(expression) - 1 and expression[index + 1] == '?':
-            condition = expression[index] == 'T'
-            true_case, end_index = self.__resolve(expression, index + 2)
-            false_case, end_index = self.__resolve(expression, end_index + 2)
-            return (true_case if condition else false_case, end_index)
-
-        return expression[index], index
+        return resolve(0)[0]
