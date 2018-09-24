@@ -31,41 +31,22 @@ class Solution(object):
         :type n: int
         :rtype: List[List[str]]
         """
-        seen = set()
         results = []
-        stack = [(0, [], range(n))]
+        stack = [(0, range(n), [], [], [])]
         while stack:
-            row, board, col_rack = stack.pop()
-
-            key = "".join(board)
-            if key in seen:
-                continue
-            seen.add(key)
-
-            if not self.__is_valid(board):
-                continue
-
+            row, cols, ldiags, rdiags, grid = stack.pop()
             if row == n:
-                results.append(board)
+                results.append(grid)
                 continue
 
-            for index, col in enumerate(col_rack):
-                new_row = ('.' * col) + 'Q' + ('.' * (n - col - 1))
-                stack.append((row + 1, board + [new_row], col_rack[:index] + col_rack[index + 1:]))
-
+            for c_i, col in enumerate(cols):
+                ldiag, rdiag = col + row, col + n - row - 1  # compute diagonal ids
+                if ldiag not in ldiags and rdiag not in rdiags:  # never used these diagonal ids before?
+                    stack.append((
+                        row + 1,
+                        cols[:c_i] + cols[c_i + 1:],
+                        ldiags + [ldiag],
+                        rdiags + [rdiag],
+                        grid + [('.' * col) + 'Q' + ('.' * (n - col - 1))]
+                    ))
         return results
-
-    def __is_valid(self, board):
-        seen_row, seen_col, seen_diag_left, seen_diag_right = set(), set(), set(), set()
-        for row in range(len(board)):
-            for col in range(len(board[row])):
-                if board[row][col] == 'Q':
-                    if row in seen_row or col in seen_col:
-                        return False
-                    if (col + row) in seen_diag_left or (len(board[row]) - 1 - col + row) in seen_diag_right:
-                        return False
-                    seen_row.add(row)
-                    seen_col.add(col)
-                    seen_diag_left.add(col + row)
-                    seen_diag_right.add(len(board[row]) - 1 - col + row)
-        return True
