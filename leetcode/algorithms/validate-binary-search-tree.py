@@ -34,22 +34,15 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
 #         self.right = None
 
 class Solution(object):
-    def isValidBST(self, root):
+    def isValidBST(self, node, leftmost=float('-inf'), rightmost=float('inf')):
         """
-        :type root: TreeNode
+        :type node: TreeNode
         :rtype: bool
         """
-        return self.is_valid_bst(root, None, None)
-
-    def is_valid_bst(self, node, left_limit, right_limit):
         if not node:
             return True
-        if left_limit is not None and node.val <= left_limit:
-            return False
-        if right_limit is not None and node.val >= right_limit:
-            return False
 
-        left_valid = self.is_valid_bst(node.left, left_limit, node.val)
-        right_valid = self.is_valid_bst(node.right, node.val, right_limit)
-
-        return left_valid and right_valid
+        return \
+            leftmost < node.val < rightmost and \
+            self.isValidBST(node.left, leftmost, node.val) and \
+            self.isValidBST(node.right, node.val, rightmost)
