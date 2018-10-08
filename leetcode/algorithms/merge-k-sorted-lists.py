@@ -21,32 +21,28 @@ Output: 1->1->2->3->4->4->5->6
 
 from Queue import PriorityQueue
 
-
 class Solution(object):
     def mergeKLists(self, lists):
         """
         :type lists: List[ListNode]
         :rtype: ListNode
         """
-        queue = PriorityQueue()
-        for linked_list in lists:
-            while linked_list:
-                if linked_list:
-                    queue.put((linked_list.val, linked_list))
-                    linked_list = linked_list.next
+        heads = lists[:]
+        result_head = ListNode(None)
+        result_tail = result_head
 
-        head = None
-        tail = None
-        while not queue.empty():
-            val, new_tail = queue.get()
-            if head is None:
-                head = new_tail
-                tail = new_tail
-            else:
-                tail.next = new_tail
-                tail = new_tail
+        pqueue = PriorityQueue()
+        for h_index in range(len(heads)):
+            if heads[h_index]:
+                pqueue.put((heads[h_index].val, h_index))
 
-        if tail:
-            tail.next = None
+        while not pqueue.empty():
+            h_index = pqueue.get()[1]
+            result_tail.next = heads[h_index]
+            result_tail = result_tail.next
+            if heads[h_index].next:
+                heads[h_index] = heads[h_index].next
+                pqueue.put((heads[h_index].val, h_index))
 
-        return head
+        result_tail.next = None
+        return result_head.next
