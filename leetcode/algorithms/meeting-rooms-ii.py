@@ -26,12 +26,15 @@ class Solution(object):
         if not intervals:
             return 0
 
-        starts, ends = map(sorted, zip(*[(interval.start, interval.end) for interval in intervals]))
-        ends_index = 0
-        rooms = 0
-        for start in starts:
-            if start < ends[ends_index]:
-                rooms += 1
-            else:
-                ends_index += 1
-        return rooms
+        milestones = []
+        for interval in intervals:
+            milestones.append((interval.start,  1))
+            milestones.append((interval.end  , -1))
+
+        count = 0
+        max_count = 0
+        for time, delta in sorted(milestones):
+            count += delta
+            max_count = max(count, max_count)
+
+        return max_count
